@@ -1,8 +1,11 @@
-import React from 'react'
+import { Container } from 'react-bootstrap'
 
 const NotFound = () => {
   return (
-    <div>NotFound</div>
+
+    <Container className='my-5 text-center'>
+      <img className='notFound' src='https://cdn.create.vista.com/api/media/small/38250661/stock-photo-red-question-point-and-sheet-404-not-found' />
+    </Container>
   )
 }
 
