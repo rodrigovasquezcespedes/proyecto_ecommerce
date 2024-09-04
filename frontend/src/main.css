@@ -1,0 +1,25 @@
+html, body {
+    height: 100%;
+  }
+
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .footer {
+    margin-top: auto;
+    width: 100%;
+  }
+
+  .navbar-custom {
+      transition: all 0.3s ease-in-out;
+      height: 80px;
+      background-color: #343a40;
+      transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    }
+
+    .navbar-custom.shrink {
+      height: 40px;
+    }
