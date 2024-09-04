@@ -7,7 +7,7 @@ import productRoutes from './routes/productRoutes.js'
 import cartRoutes from './routes/cartRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import paymentRoutes from './routes/paymentRoutes.js'
-import { authMiddleware } from './middlewares/authMiddleware.js' // Importar el middleware
+import authMiddleware from './middlewares/authMiddleware.js'
 
 const app = express()
 
@@ -15,7 +15,6 @@ app.use(morgan('dev'))
 app.use(cors())
 app.use(express.json())
 
-// Aplicar authMiddleware a todas las rutas
 app.use(authMiddleware)
 
 app.use('/', userRoutes)

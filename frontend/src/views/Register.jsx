@@ -6,8 +6,7 @@ import { FaUser } from 'react-icons/fa'
 import { MdAlternateEmail } from 'react-icons/md'
 import { RiLockPasswordFill } from 'react-icons/ri'
 import Swal from 'sweetalert2'
-
-const urlBaseServer = 'http://localhost:3000'
+import { urlBaseServer } from '../config'
 
 const Register = () => {
   const [user, setUser] = useState('')
