@@ -6,7 +6,7 @@ describe('Favorite Routes', () => {
   const userId = 1
   const productId = 1
 
-  test('POST /api/favorites should add a favorite and return status 201', async () => {
+  test('POST /api/favorites debería agregar un favorito y devolver el estado 201', async () => {
     const response = await request(app)
       .post('/api/favorites')
       .send({ userId, productId })
@@ -26,7 +26,7 @@ describe('Favorite Routes', () => {
     expect(response.body).toHaveProperty('productId', productId)
   })
 
-  test('DELETE /api/favorites/:favoriteId should remove a favorite and return status 204', async () => {
+  test('DELETE /api/favorites/:favoriteId debería devolver un favorito y estado 200', async () => {
     const response = await request(app).delete(
       `/api/favorites/${testFavoriteId}`
     )

@@ -2,9 +2,9 @@ import app from '../src/app'
 import request from 'supertest'
 
 describe('Product Routes', () => {
-  let testProductId
+  let testProductId = 64
 
-  test('POST /api/products should create a new product and return status 201', async () => {
+  test('POST /api/products debe crear un nuevo producto y devolver 201', async () => {
     const newProduct = {
       name: 'Test Product',
       price: 100
@@ -17,19 +17,19 @@ describe('Product Routes', () => {
     testProductId = response.body.id
   })
 
-  test('GET /api/products should return a list of products and status 200', async () => {
+  test('GET /api/products debe devolver una lista de productos y un status 200', async () => {
     const response = await request(app).get('/api/products')
     expect(response.statusCode).toBe(200)
     expect(response.body).toBeInstanceOf(Array)
   })
 
-  test('GET /api/products/:productId should return a single product and status 200', async () => {
-    const response = await request(app).get(`/api/products/${testProductId}`)
+  test('GET /api/products/:productId debe devolver un productos y estatus 200', async () => {
+    const response = await request(app).get(`/products/${testProductId}`)
     expect(response.statusCode).toBe(200)
     expect(response.body).toHaveProperty('id', testProductId)
   })
 
-  test('PUT /api/products/:productId should update a product and return status 200', async () => {
+  test('PUT /api/products/:productId debe actualizar un producto y status 200', async () => {
     const updatedProduct = {
       name: 'Updated Product',
       price: 150
@@ -42,7 +42,7 @@ describe('Product Routes', () => {
     expect(response.body).toHaveProperty('price', updatedProduct.price)
   })
 
-  test('DELETE /api/products/:productId should delete a product and return status 204', async () => {
+  test('DELETE /api/products/:productId debe eliminar un producto y status 204', async () => {
     const response = await request(app).delete(`/api/products/${testProductId}`)
     expect(response.statusCode).toBe(204)
   })

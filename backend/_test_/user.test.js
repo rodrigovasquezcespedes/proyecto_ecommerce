@@ -21,20 +21,24 @@ afterAll(async () => {
 })
 
 describe('User Routes', () => {
-  test('POST /api/register should create a new user and return status 201', async () => {
+  test('POST /api/users/register crea un usuario y devuelve un status 201', async () => {
     const newUser = {
       username: 'testUser',
       email: 'testuser@example.com',
       password: 'testpassword'
     }
-    const response = await request(app).post('/api/users/register').send(newUser)
+    const response = await request(app)
+      .post('/api/users/register')
+      .send(newUser)
     expect(response.statusCode).toBe(201)
     expect(response.body).toHaveProperty('username', newUser.username)
     expect(response.body).toHaveProperty('email', newUser.email)
 
+    // Save the user ID for future tests
     testUserId = response.body.id
 
-    const registeredUser = await db.User.findById(testUserId)
+    // Verify the password was hashed
+    const registeredUser = await db.User.findById(testUserId) // Adjust as per your DB setup
     expect(registeredUser).toBeTruthy()
     const validPassword = await bcrypt.compare(
       newUser.password,
@@ -43,25 +47,27 @@ describe('User Routes', () => {
     expect(validPassword).toBe(true)
   })
 
-  test('POST /api/login with valid credentials should return status 200 and a token', async () => {
+  test('POST /api/users/login con credenciales válidas debe devolver el estado 200 y un token', async () => {
     const credentials = {
       email: 'testuser@example.com',
       password: 'testpassword'
     }
-    const response = await request(app).post('/api/users/login').send(credentials)
+    const response = await request(app)
+      .post('/api/users/login')
+      .send(credentials)
     expect(response.statusCode).toBe(200)
     expect(response.body).toHaveProperty('token')
     expect(typeof response.body.token).toBe('string')
   })
 
-  test('PUT /api/users/:idUser should update an existing user and return status 200', async () => {
+  test('PUT /api/users/:idUser debe actualizar un usuario existente y devolver el estado 200', async () => {
     const updatedUser = {
       username: 'updatedUser',
       email: 'updateduser@example.com',
       password: 'newpassword'
     }
     const response = await request(app)
-      .put(`/users/${testUserId}`)
+      .put(`/api/users/${testUserId}`)
       .send(updatedUser)
       .set('Authorization', `Bearer ${token}`)
     expect(response.statusCode).toBe(200)
@@ -69,7 +75,7 @@ describe('User Routes', () => {
     expect(response.body).toHaveProperty('email', updatedUser.email)
   })
 
-  test('DELETE /api/users/:idUser should delete an existing user and return status 204', async () => {
+  test('DELETE /api/users/:idUser debe eliminar un usuario existente y devolver el estado 204', async () => {
     const response = await request(app)
       .delete(`/api/users/${testUserId}`)
       .set('Authorization', `Bearer ${token}`)
