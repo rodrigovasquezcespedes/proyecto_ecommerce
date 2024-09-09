@@ -1,25 +1,18 @@
 import express from 'express'
-import morgan from 'morgan'
+import dotenv from 'dotenv'
 import cors from 'cors'
 import userRoutes from './routes/userRoutes.js'
-import addressRoutes from './routes/addressRoutes.js'
 import productRoutes from './routes/productRoutes.js'
-import cartRoutes from './routes/cartRoutes.js'
-import orderRoutes from './routes/orderRoutes.js'
-import paymentRoutes from './routes/paymentRoutes.js'
-import authMiddleware from './middlewares/authMiddleware.js'
+import favoriteRoutes from './routes/favoriteRoutes.js'
+
+dotenv.config()
 
 const app = express()
-
+app.use(cors())
 app.use(express.json())
 
-app.use(authMiddleware)
-
-app.use('/', userRoutes)
-app.use('/', addressRoutes)
-app.use('/', productRoutes)
-app.use('/', cartRoutes)
-app.use('/', orderRoutes)
-app.use('/', paymentRoutes)
+app.use('/api/users', userRoutes)
+app.use('/api/products', productRoutes)
+app.use('/api', favoriteRoutes)
 
 export default app

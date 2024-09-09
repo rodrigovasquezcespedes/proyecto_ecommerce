@@ -6,12 +6,11 @@ import { FaUser } from 'react-icons/fa'
 import { RiLockPasswordFill } from 'react-icons/ri'
 import Swal from 'sweetalert2'
 import axios from 'axios'
-
-const urlBaseServer = 'http://localhost:3000'
+import { urlBaseServer } from '../config'
 
 const Login = () => {
   const { login } = useContext(AuthContext)
-  const [user, setUser] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const navigate = useNavigate()
@@ -19,7 +18,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (user.trim() === '' || password.trim() === '') {
+    if (email.trim() === '' || password.trim() === '') {
       Swal.fire({
         icon: 'error',
         title: 'Campos incompletos',
@@ -28,7 +27,7 @@ const Login = () => {
       return
     }
 
-    if (user === 'admin' && password === '1234') {
+    if (email === 'admin@example.com' && password === '1234') {
       login()
       Swal.fire({
         icon: 'success',
@@ -39,7 +38,7 @@ const Login = () => {
       navigate('/productos')
     } else {
       try {
-        const response = await axios.post(`${urlBaseServer}/login`, { user, password })
+        const response = await axios.post(`${urlBaseServer}/api/users/login`, { email, password })
 
         if (response.status === 200) {
           login()
@@ -56,7 +55,7 @@ const Login = () => {
         Swal.fire({
           icon: 'error',
           title: 'Error de autenticación',
-          text: 'Usuario o contraseña incorrectos'
+          text: 'Correo o contraseña incorrectos'
         })
       }
     }
@@ -67,14 +66,14 @@ const Login = () => {
       <Form onSubmit={handleSubmit} className='col-10 col-sm-8 col-md-6 col-lg-4 m-auto border border-light-subtle rounded-5 p-5 mt-5'>
         <legend className='mb-3 text-center'>Inicia Sesión</legend>
         <Form.Group className='mt-2'>
-          <Form.Label>Ingresa tu nombre de usuario</Form.Label>
+          <Form.Label>Ingresa tu correo electrónico</Form.Label>
           <InputGroup>
             <InputGroup.Text><FaUser /></InputGroup.Text>
             <Form.Control
-              type='text'
-              name='name'
-              onChange={(e) => setUser(e.target.value)}
-              value={user}
+              type='email'
+              name='email'
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
             />
           </InputGroup>
         </Form.Group>

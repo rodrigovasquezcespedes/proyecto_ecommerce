@@ -28,32 +28,41 @@ const Profile = () => {
     setMarca('')
   }
 
+  // Obtener los productos desde la base de datos
   const getArticulos = async () => {
     try {
-      const { data: articulos } = await axios.get(urlBaseServer + '/articulos')
+      const { data: articulos } = await axios.get(urlBaseServer + '/api/products')
       setArticulos(articulos)
     } catch (error) {
-      console.error('Error al obtener articulos', error)
+      console.error('Error al obtener productos', error)
     }
   }
 
+  // Agregar un nuevo producto a la base de datos
   const agregarArticulo = async () => {
     try {
-      const articulo = { nombre, img, desc, precio, marca }
-      await axios.post(urlBaseServer + '/articulos', articulo)
+      const producto = {
+        name: nombre,
+        imageUrl: img,
+        description: desc,
+        price: parseInt(precio, 10), // Asegurar que el precio sea un número
+        brand: marca
+      }
+      await axios.post(urlBaseServer + '/api/products', producto)
       getArticulos()
       vaciarFormulario()
     } catch (error) {
-      console.error('Error al agregar el articulo', error)
+      console.error('Error al agregar el producto', error)
     }
   }
 
+  // Eliminar un producto de la base de datos
   const eliminarArticulo = async (id) => {
     try {
-      await axios.delete(urlBaseServer + `/articulos/${id}`)
+      await axios.delete(urlBaseServer + `/api/products/${id}`)
       getArticulos()
     } catch (error) {
-      console.error('Error al eliminar el aticulo', error)
+      console.error('Error al eliminar el producto', error)
     }
   }
 
@@ -69,7 +78,7 @@ const Profile = () => {
 
       <Container>
         <Row>
-
+          {/* Formulario para agregar productos */}
           <FormPost
             setNombre={setNombre}
             setImg={setImg}
@@ -78,6 +87,8 @@ const Profile = () => {
             setPrecio={setPrecio}
             agregarArticulo={agregarArticulo}
           />
+
+          {/* Listar los productos obtenidos de la base de datos */}
           {articulos.map((articulo, index) => (
             <Articulos
               key={index}
@@ -87,7 +98,6 @@ const Profile = () => {
           ))}
         </Row>
       </Container>
-
     </Container>
   )
 }

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Container, Form, InputGroup, Row } from 'react-bootstrap'
@@ -6,24 +5,26 @@ import { FaUser } from 'react-icons/fa'
 import { MdAlternateEmail } from 'react-icons/md'
 import { RiLockPasswordFill } from 'react-icons/ri'
 import Swal from 'sweetalert2'
+import axios from 'axios'
 import { urlBaseServer } from '../config'
 
 const Register = () => {
-  const [user, setUser] = useState('')
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
   const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
 
     if (
-      user.trim() === '' ||
+      name.trim() === '' ||
       email.trim() === '' ||
       password.trim() === '' ||
-      confirmPassword.trim() === '') {
+      confirmPassword.trim() === ''
+    ) {
       Swal.fire({
         icon: 'error',
         title: 'Campos incompletos',
@@ -42,26 +43,27 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post(`${urlBaseServer}/usuarios`, {
-        user,
+      // Corregido para usar axios
+      const response = await axios.post(`${urlBaseServer}/api/users/register`, {
+        name,
         email,
         password
       })
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         Swal.fire({
           icon: 'success',
           title: 'Registro exitoso',
           text: '¡Te has registrado correctamente!'
         })
-        navigate('/productos')
+        navigate('/Login')
       }
     } catch (error) {
       console.error('Error al registrar el usuario:', error)
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Hubo un problema al registrarte. Inténtalo nuevamente.'
+        text: error.response?.data?.message || 'Hubo un problema al registrarte. Inténtalo nuevamente.'
       })
     }
   }
@@ -69,62 +71,75 @@ const Register = () => {
   return (
     <Container className='my-5'>
       <Row>
-        <Form onSubmit={handleSubmit} className='col-10 col-sm-8 col-md-6 col-lg-4 m-auto border border-light-subtle rounded-5 p-5 mt-5'>
-          <legend className='mb-3 text-center'>¿Aún no te has registrado?</legend>
+        <Form
+          onSubmit={handleSubmit}
+          className='col-10 col-sm-8 col-md-6 col-lg-4 m-auto border border-light-subtle rounded-5 p-5 mt-5'
+        >
+          <legend className='mb-3 text-center'>Haven't registered yet?</legend>
           <Form.Group className='mt-2'>
-            <Form.Label>Ingresa tu nombre de usuario</Form.Label>
+            <Form.Label>Enter your username</Form.Label>
             <InputGroup>
-              <InputGroup.Text><FaUser /></InputGroup.Text>
+              <InputGroup.Text>
+                <FaUser />
+              </InputGroup.Text>
               <Form.Control
                 type='text'
-                onChange={(e) => setUser(e.target.value)}
-                value={user}
+                onChange={e => setName(e.target.value)}
+                value={name}
               />
             </InputGroup>
           </Form.Group>
 
           <Form.Group className='mt-2'>
-            <Form.Label>Ingresa tu email</Form.Label>
+            <Form.Label>Enter your email</Form.Label>
             <InputGroup>
-              <InputGroup.Text><MdAlternateEmail /></InputGroup.Text>
+              <InputGroup.Text>
+                <MdAlternateEmail />
+              </InputGroup.Text>
               <Form.Control
                 type='email'
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 value={email}
               />
             </InputGroup>
           </Form.Group>
 
           <Form.Group className='mt-2'>
-            <Form.Label>Crea una contraseña</Form.Label>
+            <Form.Label>Create a password</Form.Label>
             <InputGroup>
-              <InputGroup.Text><RiLockPasswordFill /></InputGroup.Text>
+              <InputGroup.Text>
+                <RiLockPasswordFill />
+              </InputGroup.Text>
               <Form.Control
                 type='password'
                 name='password'
                 autoComplete='off'
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 value={password}
               />
             </InputGroup>
           </Form.Group>
 
           <Form.Group className='mt-2'>
-            <Form.Label>Repite la contraseña</Form.Label>
+            <Form.Label>Confirm your password</Form.Label>
             <InputGroup>
-              <InputGroup.Text><RiLockPasswordFill /></InputGroup.Text>
+              <InputGroup.Text>
+                <RiLockPasswordFill />
+              </InputGroup.Text>
               <Form.Control
                 type='password'
-                name='confirm'
+                name='confirmPassword'
                 autoComplete='off'
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={e => setConfirmPassword(e.target.value)}
                 value={confirmPassword}
               />
             </InputGroup>
           </Form.Group>
 
           <div className='text-center'>
-            <Button className='mt-3 px-5' type='submit' variant='dark'>Enviar</Button>
+            <Button className='mt-3 px-5' type='submit' variant='dark'>
+              Submit
+            </Button>
           </div>
         </Form>
       </Row>

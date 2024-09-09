@@ -9,12 +9,16 @@ import logo from '../assets/logo.png'
 const Navigation = () => {
   const { carrito, formatPrice } = useContext(TecnoContext)
   const { isAuthenticated, logout } = useContext(AuthContext)
-  const total = carrito.reduce(
-    (acumulador, valorActual) => acumulador + valorActual.precio * valorActual.count, 0
-  )
+
+  // Calcular el total del precio del carrito
+  const total = carrito.reduce((accum, item) => accum + item.price * item.count, 0)
   const formattedTotal = formatPrice(total)
 
-  const handleMenu = ({ isActive }) => isActive ? 'nav-item nav-link active' : 'nav-item nav-link'
+  // Calcular la cantidad total de productos en el carrito
+  const cantidadTotalProductos = carrito.reduce((accum, item) => accum + item.count, 0)
+
+  const handleMenu = ({ isActive }) =>
+    isActive ? 'nav-item nav-link active' : 'nav-item nav-link'
 
   const [navbarClass, setNavbarClass] = useState('navbar-custom')
 
@@ -36,7 +40,12 @@ const Navigation = () => {
 
   return (
     <>
-      <Navbar expand='lg' bg='dark' data-bs-theme='dark' className={`${navbarClass} sticky-top`}>
+      <Navbar
+        expand='lg'
+        bg='dark'
+        data-bs-theme='dark'
+        className={`${navbarClass} sticky-top`}
+      >
         <Container>
           <NavLink className={handleMenu} to='/'>
             <Navbar.Brand>
@@ -52,20 +61,38 @@ const Navigation = () => {
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
-              <NavLink className={handleMenu} to='/'><FaHome /></NavLink>
+              <NavLink className={handleMenu} to='/'>
+                <FaHome />
+              </NavLink>
               {isAuthenticated && (
                 <>
-                  <NavLink className={handleMenu} to='/productos'><FaStore /></NavLink>
-                  <NavLink className={handleMenu} to='/profile'><FaUser /></NavLink>
-                  <NavLink className={handleMenu} to='/favoritos'><FaHeart /></NavLink>
-                  <NavLink className={handleMenu} to='/carrito'><FaShoppingCart />{formattedTotal}</NavLink>
+                  <NavLink className={handleMenu} to='/productos'>
+                    <FaStore />
+                  </NavLink>
+                  <NavLink className={handleMenu} to='/profile'>
+                    <FaUser />
+                  </NavLink>
+                  <NavLink className={handleMenu} to='/favoritos'>
+                    <FaHeart />
+                  </NavLink>
+                  <NavLink className={handleMenu} to='/carrito'>
+                    <FaShoppingCart />
+                    {/* Mostrar cantidad de productos si el carrito no está vacío */}
+                    {cantidadTotalProductos > 0 && (
+                      <span className="badge bg-danger ms-2">{cantidadTotalProductos}</span>
+                    )}
+                  </NavLink>
                   <Nav.Link onClick={logout}>Logout</Nav.Link>
                 </>
               )}
               {!isAuthenticated && (
                 <>
-                  <NavLink className={handleMenu} to='/login'>Login</NavLink>
-                  <NavLink className={handleMenu} to='/register'>Registrarse</NavLink>
+                  <NavLink className={handleMenu} to='/login'>
+                    Login
+                  </NavLink>
+                  <NavLink className={handleMenu} to='/register'>
+                    Registrarse
+                  </NavLink>
                 </>
               )}
             </Nav>
