@@ -1,6 +1,5 @@
 import productModel from '../models/productModel.js'
 
-// Crear un nuevo producto con especificaciones
 const createNewProduct = async (req, res) => {
   const {
     name,
@@ -14,7 +13,6 @@ const createNewProduct = async (req, res) => {
   } = req.body
 
   try {
-    // Crear el producto
     const newProduct = await productModel.createProduct(
       name,
       description,
@@ -25,7 +23,6 @@ const createNewProduct = async (req, res) => {
       categoryId
     )
 
-    // Verificar si hay especificaciones antes de intentar insertarlas
     if (specifications && specifications.length > 0) {
       await productModel.createProductSpecifications(
         newProduct.id_product,
@@ -39,7 +36,6 @@ const createNewProduct = async (req, res) => {
   }
 }
 
-// Obtener todos los productos con especificaciones
 const getProducts = async (req, res) => {
   try {
     const products = await productModel.getAllProducts()
@@ -49,7 +45,6 @@ const getProducts = async (req, res) => {
   }
 }
 
-// Obtener un producto por ID
 const getProduct = async (req, res) => {
   const { productId } = req.params
 
@@ -64,7 +59,6 @@ const getProduct = async (req, res) => {
   }
 }
 
-// Actualizar un producto por ID
 const updateProduct = async (req, res) => {
   const { productId } = req.params
   const {
@@ -96,7 +90,6 @@ const updateProduct = async (req, res) => {
   }
 }
 
-// Eliminar un producto por ID
 const deleteProduct = async (req, res) => {
   const { productId } = req.params
 

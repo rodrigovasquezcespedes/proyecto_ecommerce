@@ -1,4 +1,4 @@
-import db from '../config/db.js' // Asegúrate de que esta sea tu configuración de base de datos
+import db from '../config/db.js'
 
 const addFavorite = async (userId, productId) => {
   const query =

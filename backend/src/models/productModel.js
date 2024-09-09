@@ -1,6 +1,5 @@
 import pool from '../config/db.js'
 
-// Crear producto
 const createProduct = async (
   name,
   description,
@@ -14,24 +13,20 @@ const createProduct = async (
     'INSERT INTO products (name, description, price, stock, image_url, brand, id_category) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *'
   const values = [name, description, price, stock, imageUrl, brand, categoryId]
   const result = await pool.query(query, values)
-  return result.rows[0] // Retorna el producto insertado
+  return result.rows[0]
 }
 
-// Crear especificaciones del producto
 const createProductSpecifications = async (productId, specifications) => {
   const query =
     'INSERT INTO product_specifications (id_product, spec_name, spec_value) VALUES ($1, $2, $3)'
 
   for (const spec of specifications) {
-    const specName = Object.keys(spec)[0] // Obtén el nombre de la especificación
-    const specValue = spec[specName] // Obtén el valor de la especificación
-
-    // Inserta la especificación en la tabla product_specifications
+    const specName = Object.keys(spec)[0]
+    const specValue = spec[specName]
     await pool.query(query, [productId, specName, specValue])
   }
 }
 
-// Obtener todos los productos con especificaciones
 const getAllProducts = async () => {
   const productQuery = 'SELECT * FROM products'
   const specQuery = 'SELECT * FROM product_specifications WHERE id_product = $1'
@@ -49,7 +44,6 @@ const getAllProducts = async () => {
   return products
 }
 
-// Obtener un producto por ID con sus especificaciones
 const getProductById = async productId => {
   const productQuery = 'SELECT * FROM products WHERE id_product = $1'
   const specQuery = 'SELECT * FROM product_specifications WHERE id_product = $1'
@@ -68,8 +62,6 @@ const getProductById = async productId => {
 
   return product
 }
-
-// Actualizar un producto y sus especificaciones
 const updateProductById = async (
   productId,
   name,
@@ -95,7 +87,6 @@ const updateProductById = async (
   ]
   const result = await pool.query(productQuery, values)
 
-  // Eliminar especificaciones antiguas y agregar nuevas
   await pool.query('DELETE FROM product_specifications WHERE id_product = $1', [
     productId
   ])
@@ -104,7 +95,6 @@ const updateProductById = async (
   return result.rows[0]
 }
 
-// Eliminar un producto y sus especificaciones
 const deleteProductById = async productId => {
   await pool.query('DELETE FROM product_specifications WHERE id_product = $1', [
     productId

@@ -2,12 +2,25 @@ import app from '../src/app'
 import request from 'supertest'
 
 describe('Product Routes', () => {
-  let testProductId = 64
+  let testProductId = 65
 
   test('POST /api/products debe crear un nuevo producto y devolver 201', async () => {
     const newProduct = {
-      name: 'Test Product',
-      price: 100
+      name: 'tv',
+      description: 'tv ',
+      price: 1990,
+      stock: 1,
+      imageUrl:
+        'https://i.etsystatic.com/23192778/r/il/a83877/3367328908/il_1140xN.3367328908_r3yf.jpg',
+      brand: 'chancho',
+      categoryId: 5,
+      specifications: [
+        { Tipo: 'Streaming' },
+        { 'Conectividad/conexión': 'Inalámbrico' },
+        { 'Garantía del proveedor': '12 meses' },
+        { Modelo: 'MN873CI/A' },
+        { 'Incluye parlantes': 'Si' }
+      ]
     }
     const response = await request(app).post('/api/products').send(newProduct)
     expect(response.statusCode).toBe(201)
@@ -24,7 +37,7 @@ describe('Product Routes', () => {
   })
 
   test('GET /api/products/:productId debe devolver un productos y estatus 200', async () => {
-    const response = await request(app).get(`/products/${testProductId}`)
+    const response = await request(app).get(`/api/products/${testProductId}`)
     expect(response.statusCode).toBe(200)
     expect(response.body).toHaveProperty('id', testProductId)
   })

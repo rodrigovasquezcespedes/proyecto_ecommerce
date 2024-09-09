@@ -1,4 +1,3 @@
-// controllers/categoryController.js
 import categoryModel from '../models/categoryModel.js'
 
 const fetchCategories = async (req, res) => {
